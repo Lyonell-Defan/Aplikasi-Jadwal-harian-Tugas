@@ -11,34 +11,39 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 15px;
 }
 
+/* CARD */
 .container {
     background: #ffffff;
     width: 100%;
-    max-width: 360px;
-    padding: 25px;
+    max-width: 420px;
+    padding: 22px;
     border-radius: 18px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    animation: fadeIn 0.8s ease;
+    animation: fadeIn 0.6s ease;
 }
 
+/* TITLE */
 h1 {
     text-align: center;
     color: #333;
+    font-size: 22px;
 }
 
 .subtitle {
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
     color: #777;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
+/* INPUT */
 .input-area {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 input {
@@ -46,8 +51,8 @@ input {
     padding: 12px;
     border-radius: 12px;
     border: 1px solid #ddd;
+    font-size: 14px;
     outline: none;
-    transition: 0.3s;
 }
 
 input:focus {
@@ -57,6 +62,7 @@ input:focus {
 
 button {
     width: 48px;
+    height: 48px;
     border: none;
     border-radius: 12px;
     background: #667eea;
@@ -75,11 +81,15 @@ button:active {
     transform: scale(0.95);
 }
 
+/* LIST */
 ul {
     list-style: none;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
-/* ===== TASK ITEM ===== */
+/* ITEM */
 li {
     background: #f5f6fa;
     padding: 12px 14px;
@@ -89,42 +99,35 @@ li {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    animation: slideIn 0.4s ease;
+    animation: slideIn 0.3s ease;
     transition: 0.3s;
 }
 
 li:hover {
-    transform: translateX(5px);
     background: #eef0ff;
 }
 
-/* selesai */
 li.completed {
     text-decoration: line-through;
     color: #999;
     background: #e0e0e0;
-    animation: checkDone 0.3s ease;
 }
 
-/* tombol hapus */
+/* DELETE BUTTON */
 li button {
     background: transparent;
+    border: none;
     color: #ff4d4d;
     font-size: 18px;
-    border: none;
     cursor: pointer;
-    transition: 0.3s;
+    padding-left: 10px;
 }
 
-li button:hover {
-    transform: scale(1.2);
-}
-
-/* ===== ANIMATIONS ===== */
+/* ANIMATIONS */
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -135,7 +138,7 @@ li button:hover {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.96);
     }
     to {
         opacity: 1;
@@ -143,14 +146,19 @@ li button:hover {
     }
 }
 
-@keyframes checkDone {
-    0% {
-        transform: scale(1);
+/* ===== MOBILE KECIL ===== */
+@media (max-width: 360px) {
+    h1 {
+        font-size: 20px;
     }
-    50% {
-        transform: scale(1.05);
+
+    button {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
     }
-    100% {
-        transform: scale(1);
+
+    input {
+        padding: 10px;
     }
 }
