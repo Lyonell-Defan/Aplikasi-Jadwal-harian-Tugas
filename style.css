@@ -1,55 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
 .container {
-    background: white;
-    padding: 20px;
-    width: 300px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background: #ffffff;
+    width: 100%;
+    max-width: 360px;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    animation: fadeIn 0.8s ease;
 }
 
 h1 {
     text-align: center;
+    color: #333;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
 }
 
 .input-area {
     display: flex;
-    gap: 5px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 input {
     flex: 1;
-    padding: 8px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102,126,234,0.2);
 }
 
 button {
-    padding: 8px;
+    width: 48px;
+    border: none;
+    border-radius: 12px;
+    background: #667eea;
+    color: white;
+    font-size: 22px;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #5563d6;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
 }
 
 ul {
     list-style: none;
-    padding: 0;
-    margin-top: 15px;
 }
 
+/* ===== TASK ITEM ===== */
 li {
+    background: #f5f6fa;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
-    background: #eee;
-    padding: 8px;
-    margin-bottom: 5px;
-    border-radius: 5px;
+    align-items: center;
+    cursor: pointer;
+    animation: slideIn 0.4s ease;
+    transition: 0.3s;
 }
 
-.completed {
+li:hover {
+    transform: translateX(5px);
+    background: #eef0ff;
+}
+
+/* selesai */
+li.completed {
     text-decoration: line-through;
-    color: gray;
+    color: #999;
+    background: #e0e0e0;
+    animation: checkDone 0.3s ease;
+}
+
+/* tombol hapus */
+li button {
+    background: transparent;
+    color: #ff4d4d;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+li button:hover {
+    transform: scale(1.2);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes checkDone {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
