@@ -3,6 +3,7 @@ const taskList = document.getElementById("taskList");
 
 document.addEventListener("DOMContentLoaded", loadTasks);
 
+// ================== ADD TASK ==================
 function addTask() {
     if (taskInput.value.trim() === "") {
         alert("Tugas tidak boleh kosong!");
@@ -10,37 +11,42 @@ function addTask() {
     }
 
     const task = {
+        id: Date.now(),          // 🔑 ID unik
         text: taskInput.value,
         completed: false
     };
 
     const tasks = getTasks();
     tasks.push(task);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    saveTasks(tasks);
 
     renderTask(task);
     taskInput.value = "";
 }
 
+// ================== RENDER ==================
 function renderTask(task) {
     const li = document.createElement("li");
+    li.dataset.id = task.id;
     li.textContent = task.text;
 
-    // 🔥 PENTING: restore status selesai
+    // restore status selesai
     if (task.completed) {
         li.classList.add("completed");
     }
 
-    li.addEventListener("click", function () {
+    // toggle selesai
+    li.addEventListener("click", () => {
         li.classList.toggle("completed");
-        updateTaskStatus(task.text, li.classList.contains("completed"));
+        updateStatus(task.id, li.classList.contains("completed"));
     });
 
+    // tombol hapus
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "❌";
-    deleteBtn.addEventListener("click", function (e) {
+    deleteBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        deleteTask(task.text);
+        deleteTask(task.id);
         li.remove();
     });
 
@@ -48,30 +54,38 @@ function renderTask(task) {
     taskList.appendChild(li);
 }
 
+// ================== STORAGE ==================
 function getTasks() {
     return localStorage.getItem("tasks")
         ? JSON.parse(localStorage.getItem("tasks"))
         : [];
 }
 
+function saveTasks(tasks) {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+// ================== LOAD ==================
 function loadTasks() {
-    const tasks = getTasks();
     taskList.innerHTML = "";
+    const tasks = getTasks();
     tasks.forEach(task => renderTask(task));
 }
 
-function updateTaskStatus(text, completed) {
+// ================== UPDATE ==================
+function updateStatus(id, completed) {
     const tasks = getTasks();
     tasks.forEach(task => {
-        if (task.text === text) {
+        if (task.id === id) {
             task.completed = completed;
         }
     });
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    saveTasks(tasks);
 }
 
-function deleteTask(text) {
+// ================== DELETE ==================
+function deleteTask(id) {
     let tasks = getTasks();
-    tasks = tasks.filter(task => task.text !== text);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    tasks = tasks.filter(task => task.id !== id);
+    saveTasks(tasks);
 }
