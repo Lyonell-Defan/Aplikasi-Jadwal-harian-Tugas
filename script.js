@@ -1,11 +1,10 @@
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 
-// ambil data dari localStorage saat halaman dibuka
 document.addEventListener("DOMContentLoaded", loadTasks);
 
 function addTask() {
-    if (taskInput.value === "") {
+    if (taskInput.value.trim() === "") {
         alert("Tugas tidak boleh kosong!");
         return;
     }
@@ -15,77 +14,64 @@ function addTask() {
         completed: false
     };
 
-    saveTask(task);
-    renderTask(task);
+    const tasks = getTasks();
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 
+    renderTask(task);
     taskInput.value = "";
 }
 
-// simpan ke localStorage
-function saveTask(task) {
-    let tasks = getTasks();
-    tasks.push(task);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+function renderTask(task) {
+    const li = document.createElement("li");
+    li.textContent = task.text;
+
+    // 🔥 PENTING: restore status selesai
+    if (task.completed) {
+        li.classList.add("completed");
+    }
+
+    li.addEventListener("click", function () {
+        li.classList.toggle("completed");
+        updateTaskStatus(task.text, li.classList.contains("completed"));
+    });
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "❌";
+    deleteBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        deleteTask(task.text);
+        li.remove();
+    });
+
+    li.appendChild(deleteBtn);
+    taskList.appendChild(li);
 }
 
-// ambil semua task
 function getTasks() {
     return localStorage.getItem("tasks")
         ? JSON.parse(localStorage.getItem("tasks"))
         : [];
 }
 
-// tampilkan task
-function renderTask(task) {
-    const li = document.createElement("li");
-    li.textContent = task.text;
-
-    if (task.completed) {
-        li.classList.add("completed");
-    }
-
-    li.onclick = function () {
-        task.completed = !task.completed;
-        updateTasks();
-        li.classList.toggle("completed");
-    };
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "❌";
-    deleteBtn.onclick = function (e) {
-        e.stopPropagation();
-        li.remove();
-        deleteTask(task.text);
-    };
-
-    li.appendChild(deleteBtn);
-    taskList.appendChild(li);
+function loadTasks() {
+    const tasks = getTasks();
+    taskList.innerHTML = "";
+    tasks.forEach(task => renderTask(task));
 }
 
-// hapus task
+function updateTaskStatus(text, completed) {
+    const tasks = getTasks();
+    tasks.forEach(task => {
+        if (task.text === text) {
+            task.completed = completed;
+        }
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
 function deleteTask(text) {
     let tasks = getTasks();
     tasks = tasks.filter(task => task.text !== text);
     localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-// update status checklist
-function updateTasks() {
-    const items = document.querySelectorAll("li");
-    let tasks = [];
-
-    items.forEach(item => {
-        tasks.push({
-            text: item.firstChild.textContent,
-            completed: item.classList.contains("completed")
-        });
-    });
-
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-// load ulang saat refresh
-function loadTasks() {
-    const tasks = getTasks();
-    tasks.forEach(task => renderTask(task));
 }
